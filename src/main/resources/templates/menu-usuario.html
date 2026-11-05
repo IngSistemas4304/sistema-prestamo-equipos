@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de usuarios</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f5f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .contenedor {
+            max-width: 650px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px #00000015;
+            text-align: center;
+        }
+
+        h1 {
+            color: #17365d;
+        }
+
+        p {
+            color: #555;
+        }
+
+        a {
+            display: block;
+            padding: 14px;
+            margin-top: 18px;
+            background-color: #17365d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        a:hover {
+            background-color: #2f75b5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>GESTIÓN DE USUARIOS</h1>
+
+        <p>Seleccione la operación que desea realizar.</p>
+
+        <a th:href="@{/usuarios/nuevo}">
+            REGISTRAR USUARIO
+        </a>
+
+        <a th:href="@{/usuarios}">
+            CONSULTAR USUARIOS
+        </a>
+
+        <a th:href="@{/solicitudes/nueva}">
+            GESTIÓN DE SOLICITUDES
+        </a>
+
+        <a th:href="@{/solicitudes/pendientes/vista}">
+            APROBAR O RECHAZAR SOLICITUDES
+        </a>
+
+    </div>
+
+</body>
+</html>

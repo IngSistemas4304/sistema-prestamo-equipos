@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de usuarios</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f5f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .contenedor {
+            max-width: 1000px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px #00000015;
+        }
+
+        h1 {
+            color: #17365d;
+            text-align: center;
+        }
+
+        .busqueda {
+            width: 70%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button, .boton {
+            padding: 10px 15px;
+            background-color: #17365d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button:hover, .boton:hover {
+            background-color: #2f75b5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #17365d;
+            color: white;
+        }
+
+        .acciones {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .volver {
+            display: inline-block;
+            margin-top: 25px;
+            color: #17365d;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>GESTIÓN DE USUARIOS</h1>
+
+        <a class="boton" th:href="@{/usuarios/nuevo}">
+            REGISTRAR USUARIO
+        </a>
+
+        <br><br>
+
+        <form>
+            <input class="busqueda" type="text"
+                   placeholder="Buscar por documento o nombre">
+            <button type="submit">BUSCAR</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>DOCUMENTO</th>
+                    <th>NOMBRES</th>
+                    <th>APELLIDOS</th>
+                    <th>CORREO</th>
+                    <th>TELÉFONO</th>
+                    <th>ESTADO</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td colspan="7">No hay usuarios registrados</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a class="volver" th:href="@{/solicitudes/nueva}">
+            Volver a solicitudes
+        </a>
+
+    </div>
+
+</body>
+</html>

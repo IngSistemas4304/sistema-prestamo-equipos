@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.uniajc.sistemaprestamos.service.SolicitudService;
 import com.uniajc.sistemaprestamos.repository.EquipoRepository;
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.PostMapping;
+import com.uniajc.sistemaprestamos.entity.Solicitud;
 
 @Controller
 public class SolicitudWebController {
@@ -15,7 +19,7 @@ public class SolicitudWebController {
     private final EquipoRepository equipoRepository;
 
     public SolicitudWebController(
-            SolicitudService solicitudService,
+    		SolicitudService solicitudService,
             EquipoRepository equipoRepository) {
         this.solicitudService = solicitudService;
         this.equipoRepository = equipoRepository;
@@ -47,5 +51,31 @@ public class SolicitudWebController {
                 solicitudService.consultarPendientes());
 
         return "solicitudes-pendientes";
+    }
+    
+    // Registrar una nueva solicitud desde el formulario
+    @PostMapping("/solicitudes/crear")
+    public String crearSolicitud(
+            @RequestParam Long idUsuario,
+            @RequestParam Long idEquipo,
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaInicio,
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fechaFin,
+            @RequestParam String motivo) {
+
+        Solicitud solicitud = new Solicitud();
+
+        solicitud.setIdUsuario(idUsuario);
+        solicitud.setIdEquipo(idEquipo);
+        solicitud.setFechaInicio(fechaInicio);
+        solicitud.setFechaFin(fechaFin);
+        solicitud.setMotivo(motivo);
+
+        solicitudService.registrarSolicitud(solicitud);
+
+        return "redirect:/solicitudes/mis-solicitudes?idUsuario=" + idUsuario;
     }
 }

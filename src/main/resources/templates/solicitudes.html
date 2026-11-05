@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,13 +34,14 @@
             font-weight: bold;
         }
 
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 11px;
             margin-top: 7px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
         button {
@@ -57,6 +59,18 @@
         button:hover {
             background: #2f75b5;
         }
+
+        .volver {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #17365d;
+            text-decoration: none;
+        }
+
+        .volver:hover {
+            color: #2f75b5;
+        }
     </style>
 </head>
 
@@ -64,32 +78,79 @@
 
     <div class="contenedor">
 
-        <h1>Solicitud de equipos</h1>
+        <h1>SOLICITUD DE EQUIPOS</h1>
 
         <p>Completa los siguientes datos para solicitar un equipo tecnológico.</p>
 
-        <form th:action="@{/solicitudes/crear}" method="post">
+        <form th:action="@{/solicitudes/crear}" method="post"
+              onsubmit="return validarFechas()">
 
             <label>Identificación del usuario:</label>
-            <input type="number" name="idUsuario" required>
+            <input type="number" name="idUsuario" min="1" required>
 
-            <label>Identificación del equipo:</label>
-            <input type="number" name="idEquipo" required>
+            <label>Seleccionar equipo:</label>
+
+            <select name="idEquipo" required>
+                <option value="">Seleccione un equipo</option>
+
+                <option th:each="equipo : ${equipos}"
+                        th:value="${equipo.idEquipo}"
+                        th:text="${equipo.nombre}">
+                </option>
+            </select>
 
             <label>Fecha de inicio:</label>
-            <input type="date" name="fechaInicio" required>
+            <input type="date" id="fechaInicio"
+                   name="fechaInicio" required>
 
             <label>Fecha de devolución:</label>
-            <input type="date" name="fechaFin" required>
+            <input type="date" id="fechaFin"
+                   name="fechaFin" required>
 
             <label>Motivo de la solicitud:</label>
-            <textarea name="motivo" rows="4" required></textarea>
+            <textarea name="motivo" rows="4"
+                      maxlength="500" required></textarea>
 
-            <button type="submit">Enviar solicitud</button>
+            <button type="submit">ENVIAR SOLICITUD</button>
 
         </form>
 
+        <a class="volver" th:href="@{/menu-usuario}">
+            VOLVER AL MENÚ
+        </a>
+
     </div>
+
+    <script>
+        const hoy = new Date();
+        const fechaHoy = new Date(
+            hoy.getTime() - hoy.getTimezoneOffset() * 60000
+        ).toISOString().split('T')[0];
+
+        const inicio = document.getElementById("fechaInicio");
+        const fin = document.getElementById("fechaFin");
+
+        inicio.min = fechaHoy;
+        fin.min = fechaHoy;
+
+        inicio.addEventListener("change", function() {
+            fin.min = inicio.value || fechaHoy;
+
+            if (fin.value && fin.value <= inicio.value) {
+                fin.value = "";
+            }
+        });
+
+        function validarFechas() {
+            if (fin.value <= inicio.value) {
+                alert("La fecha de devolución debe ser posterior a la fecha de inicio.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 
 </body>
 </html>
+
