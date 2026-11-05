@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar equipo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .contenedor {
+            max-width: 650px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px #00000015;
+        }
+
+        h1 {
+            color: #17365d;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 11px;
+            margin-top: 7px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 13px;
+            background: #17365d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #2f75b5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Solicitud de equipos</h1>
+
+        <p>Completa los siguientes datos para solicitar un equipo tecnológico.</p>
+
+        <form th:action="@{/solicitudes/crear}" method="post">
+
+            <label>Identificación del usuario:</label>
+            <input type="number" name="idUsuario" required>
+
+            <label>Identificación del equipo:</label>
+            <input type="number" name="idEquipo" required>
+
+            <label>Fecha de inicio:</label>
+            <input type="date" name="fechaInicio" required>
+
+            <label>Fecha de devolución:</label>
+            <input type="date" name="fechaFin" required>
+
+            <label>Motivo de la solicitud:</label>
+            <textarea name="motivo" rows="4" required></textarea>
+
+            <button type="submit">Enviar solicitud</button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

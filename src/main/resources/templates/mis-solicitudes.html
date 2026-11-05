@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis solicitudes</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .contenedor {
+            max-width: 950px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px #00000015;
+        }
+
+        h1 {
+            color: #17365d;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #17365d;
+            color: white;
+        }
+
+        .estado {
+            font-weight: bold;
+            color: #b7791f;
+        }
+
+        .volver {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 18px;
+            background: #17365d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Mis solicitudes</h1>
+
+        <p>Consulta aquí las solicitudes de equipos que has realizado.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>N.º solicitud</th>
+                    <th>Equipo</th>
+                    <th>Fecha de inicio</th>
+                    <th>Fecha de devolución</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="solicitud : ${solicitudes}">
+                    <td th:text="${solicitud.idSolicitud}"></td>
+                    <td th:text="${solicitud.idEquipo}"></td>
+                    <td th:text="${solicitud.fechaInicio}"></td>
+                    <td th:text="${solicitud.fechaFin}"></td>
+                    <td th:text="${solicitud.motivo}"></td>
+                    <td class="estado" th:text="${solicitud.estado}"></td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(solicitudes)}">
+                    <td colspan="6">No tienes solicitudes registradas.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="/solicitudes/nueva" class="volver">
+            Nueva solicitud
+        </a>
+
+    </div>
+
+</body>
+</html>
