@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitudes pendientes</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .contenedor {
+            max-width: 1100px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px #00000015;
+        }
+
+        h1 {
+            color: #17365d;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #17365d;
+            color: white;
+        }
+
+        button {
+            padding: 9px 13px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .aprobar {
+            background: #218838;
+        }
+
+        .rechazar {
+            background: #c0392b;
+        }
+
+        .mensaje {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <h1>Solicitudes pendientes</h1>
+
+    <p>Revisa las solicitudes realizadas por los usuarios.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>N.º solicitud</th>
+                <th>Usuario</th>
+                <th>Equipo</th>
+                <th>Fecha inicio</th>
+                <th>Fecha devolución</th>
+                <th>Motivo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="solicitud : ${solicitudes}">
+                <td th:text="${solicitud.idSolicitud}"></td>
+                <td th:text="${solicitud.idUsuario}"></td>
+                <td th:text="${solicitud.idEquipo}"></td>
+                <td th:text="${solicitud.fechaInicio}"></td>
+                <td th:text="${solicitud.fechaFin}"></td>
+                <td th:text="${solicitud.motivo}"></td>
+
+                <td>
+                    <form th:action="@{/decisiones/{idSolicitud}(idSolicitud=${solicitud.idSolicitud})}"
+                          method="post">
+
+                        <input type="hidden" name="idResponsable" value="1">
+                        <input type="hidden" name="decision" value="APROBADA">
+
+                        <button type="submit" class="aprobar">
+                            Aprobar
+                        </button>
+                    </form>
+
+                    <form th:action="@{/decisiones/{idSolicitud}(idSolicitud=${solicitud.idSolicitud})}"
+                          method="post">
+
+                        <input type="hidden" name="idResponsable" value="1">
+                        <input type="hidden" name="decision" value="RECHAZADA">
+
+                        <button type="submit" class="rechazar">
+                            Rechazar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(solicitudes)}">
+                <td colspan="7" class="mensaje">
+                    No hay solicitudes pendientes.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
