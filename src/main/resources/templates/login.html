@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión - Sistema de Préstamo de Equipos</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f4f8;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contenedor {
+            width: 350px;
+            background-color: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px #00000020;
+            text-align: center;
+        }
+
+        h1 {
+            color: #17365d;
+            font-size: 23px;
+        }
+
+        p {
+            color: #555;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-top: 18px;
+            color: #17365d;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 25px;
+            background-color: #17365d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #2f75b5;
+        }
+
+        .error {
+            color: #c0392b;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Sistema de Préstamo de Equipos</h1>
+
+        <p>Ingresa tus datos para continuar.</p>
+
+        <form th:action="@{/login}" method="post">
+
+            <label for="idUsuario">ID de usuario</label>
+
+            <input
+                type="number"
+                id="idUsuario"
+                name="idUsuario"
+                min="1"
+                placeholder="Ingrese su ID"
+                required>
+
+            <label for="clave">Clave</label>
+
+            <input
+                type="password"
+                id="clave"
+                name="clave"
+                placeholder="Ingrese su clave"
+                required>
+
+            <button type="submit">INICIAR SESIÓN</button>
+
+        </form>
+
+        <p class="error"
+           th:if="${error}"
+           th:text="${error}">
+        </p>
+
+    </div>
+
+</body>
+</html>

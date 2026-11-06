@@ -14,15 +14,16 @@
         }
 
         .contenedor {
-            max-width: 950px;
+            max-width: 1200px;
             margin: 30px auto;
             background: white;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 3px 12px #00000015;
+            overflow-x: auto;
         }
 
-        h1 {
+        h1, h2 {
             color: #17365d;
             text-align: center;
         }
@@ -34,7 +35,7 @@
         }
 
         th, td {
-            padding: 13px;
+            padding: 12px;
             border-bottom: 1px solid #ddd;
             text-align: center;
         }
@@ -46,87 +47,148 @@
 
         .estado {
             font-weight: bold;
-            color: #b7791f;
+        }
+
+        .mensaje {
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .exito {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
         }
 
         .volver {
             display: inline-block;
             margin-top: 20px;
+            margin-right: 8px;
             padding: 10px 18px;
             background: #17365d;
             color: white;
             text-decoration: none;
             border-radius: 5px;
         }
+
+        .cancelar {
+            background: #c0392b;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .sin-historial {
+            color: #666;
+        }
     </style>
 </head>
 
 <body>
+<div class="contenedor">
 
-    <div class="contenedor">
+    <h1>Mis solicitudes</h1>
+    <p>Consulta tus solicitudes y las decisiones tomadas por el encargado.</p>
 
-        <h1>Mis solicitudes</h1>
+    <div th:if="${mensaje}" class="mensaje exito"
+         th:text="${mensaje}"></div>
 
-        <p>Consulta aquí las solicitudes de equipos que has realizado.</p>
+    <div th:if="${error}" class="mensaje error"
+         th:text="${error}"></div>
 
-        <table>
-            <thead>
+    <table>
+        <thead>
+            <tr>
+                <th>N.º solicitud</th>
+                <th>Equipo</th>
+                <th>Fecha de inicio</th>
+                <th>Fecha de devolución</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <th:block th:each="solicitud : ${solicitudes}">
                 <tr>
-                    <th>N.º solicitud</th>
-                    <th>Equipo</th>
-                    <th>Fecha de inicio</th>
-                    <th>Fecha de devolución</th>
-                    <th>Motivo</th>
-                    <th>Estado</th>
-					<th>Acciones</th>
-					
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr th:each="solicitud : ${solicitudes}">
                     <td th:text="${solicitud.idSolicitud}"></td>
                     <td th:text="${solicitud.idEquipo}"></td>
                     <td th:text="${solicitud.fechaInicio}"></td>
                     <td th:text="${solicitud.fechaFin}"></td>
                     <td th:text="${solicitud.motivo}"></td>
                     <td class="estado" th:text="${solicitud.estado}"></td>
-					<td>
-					    <form th:if="${solicitud.estado == 'PENDIENTE'}"
-					          th:action="@{/solicitudes/cancelar}"
-					          method="post">
+                    <td>
+                        <form th:if="${solicitud.estado == 'PENDIENTE'}"
+                              th:action="@{/solicitudes/cancelar}"
+                              method="post">
 
-					        <input type="hidden" name="idSolicitud"
-					               th:value="${solicitud.idSolicitud}">
+                            <input type="hidden"
+                                   name="idSolicitud"
+                                   th:value="${solicitud.idSolicitud}">
 
-					        <input type="hidden" name="idUsuario"
-					               th:value="${solicitud.idUsuario}">
+                            <button type="submit" class="cancelar">
+                                Cancelar
+                            </button>
+                        </form>
 
-					        <button type="submit"
-					                style="background: #c0392b; color: white;
-					                       padding: 8px 12px; border: none;
-					                       border-radius: 5px; cursor: pointer;">
-					            Cancelar
-					        </button>
-					    </form>
-
-					    <span th:if="${solicitud.estado != 'PENDIENTE'}">
-					        No disponible
-					    </span>
-					</td>
+                        <span th:if="${solicitud.estado != 'PENDIENTE'}">
+                            No disponible
+                        </span>
+                    </td>
                 </tr>
 
-                <tr th:if="${#lists.isEmpty(solicitudes)}">
-                    <td colspan="7">No tienes solicitudes registradas.</td>
+                <tr>
+                    <td colspan="7">
+                        <strong>Historial de decisiones</strong>
+
+                        <div th:if="${#lists.isEmpty(historial[solicitud.idSolicitud])}"
+                             class="sin-historial">
+                            Esta solicitud todavía no tiene decisiones registradas.
+                        </div>
+
+                        <table th:unless="${#lists.isEmpty(historial[solicitud.idSolicitud])}">
+                            <thead>
+                                <tr>
+                                    <th>Decisión</th>
+                                    <th>Responsable</th>
+                                    <th>Observación</th>
+                                    <th>Fecha de decisión</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr th:each="decision : ${historial[solicitud.idSolicitud]}">
+                                    <td th:text="${decision.decision}"></td>
+                                    <td th:text="${decision.idResponsable}"></td>
+                                    <td th:text="${decision.observacion != null and !decision.observacion.isBlank() ? decision.observacion : 'Sin observaciones'}"></td>
+                                    <td th:text="${decision.fechaDecision}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
                 </tr>
-            </tbody>
-        </table>
+            </th:block>
 
-        <a href="/solicitudes/nueva" class="volver">
-            Nueva solicitud
-        </a>
+            <tr th:if="${#lists.isEmpty(solicitudes)}">
+                <td colspan="7">
+                    No tienes solicitudes registradas.
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-    </div>
+    <a href="/solicitudes/nueva" class="volver">Nueva solicitud</a>
+    <a href="/menu-usuario" class="volver">Volver al menú</a>
 
+</div>
 </body>
 </html>

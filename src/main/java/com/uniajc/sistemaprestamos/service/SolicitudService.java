@@ -1,21 +1,27 @@
 package com.uniajc.sistemaprestamos.service;
 
 import java.time.LocalDate;
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.uniajc.sistemaprestamos.entity.Equipo;
 import com.uniajc.sistemaprestamos.entity.Solicitud;
+import com.uniajc.sistemaprestamos.repository.EquipoRepository;
 import com.uniajc.sistemaprestamos.repository.SolicitudRepository;
 
 @Service
 public class SolicitudService {
 
     private final SolicitudRepository solicitudRepository;
+    private final EquipoRepository equipoRepository;
 
-    public SolicitudService(SolicitudRepository solicitudRepository) {
+    public SolicitudService(
+            SolicitudRepository solicitudRepository,
+            EquipoRepository equipoRepository) {
+
         this.solicitudRepository = solicitudRepository;
+        this.equipoRepository = equipoRepository;
     }
 
     // Registrar una solicitud
@@ -24,30 +30,55 @@ public class SolicitudService {
         if (solicitud.getFechaInicio() == null ||
             solicitud.getFechaFin() == null) {
             throw new IllegalArgumentException(
-                "Las fechas son obligatorias");
+                    "Las fechas son obligatorias");
         }
 
         if (solicitud.getFechaInicio().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException(
-                "La fecha de inicio no puede ser anterior a hoy");
+                    "La fecha de inicio no puede ser anterior a hoy");
         }
 
         if (!solicitud.getFechaFin().isAfter(
                 solicitud.getFechaInicio())) {
             throw new IllegalArgumentException(
-                "La fecha de devolución debe ser posterior a la fecha de inicio");
+                    "La fecha de devolución debe ser posterior a la fecha de inicio");
         }
 
         if (solicitud.getIdUsuario() == null ||
             solicitud.getIdEquipo() == null) {
             throw new IllegalArgumentException(
-                "Debe indicar el usuario y el equipo");
+                    "Debe indicar el usuario y el equipo");
         }
 
         if (solicitud.getMotivo() == null ||
             solicitud.getMotivo().isBlank()) {
             throw new IllegalArgumentException(
-                "Debe escribir el motivo de la solicitud");
+                    "Debe escribir el motivo de la solicitud");
+        }
+
+        // Verificar que el equipo exista
+        Equipo equipo = equipoRepository.findById(solicitud.getIdEquipo())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "El equipo seleccionado no existe"));
+
+        // Verificar que el equipo esté disponible
+        if (!"DISPONIBLE".equalsIgnoreCase(equipo.getEstado())) {
+            throw new IllegalArgumentException(
+                    "El equipo no está disponible para solicitudes");
+        }
+
+        // Verificar solicitudes con fechas cruzadas
+        boolean existeCruce = solicitudRepository
+                .existsByIdEquipoAndEstadoInAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(
+                        solicitud.getIdEquipo(),
+                        List.of("PENDIENTE", "APROBADA"),
+                        solicitud.getFechaFin(),
+                        solicitud.getFechaInicio()
+                );
+
+        if (existeCruce) {
+            throw new IllegalArgumentException(
+                    "El equipo ya tiene una solicitud para esas fechas");
         }
 
         solicitud.setFechaSolicitud(LocalDate.now());
@@ -62,7 +93,7 @@ public class SolicitudService {
     }
 
     // Consultar solicitudes de un usuario
-    	public List<Solicitud> consultarPorUsuario(Integer idUsuario) {
+    public List<Solicitud> consultarPorUsuario(Integer idUsuario) {
         return solicitudRepository.findByIdUsuario(idUsuario);
     }
 
@@ -70,7 +101,6 @@ public class SolicitudService {
     public List<Solicitud> consultarPendientes() {
         return solicitudRepository.findByEstado("PENDIENTE");
     }
-    
 
     // Cancelar una solicitud pendiente
     public Solicitud cancelarSolicitud(Long idSolicitud, Integer idUsuario) {
@@ -93,5 +123,4 @@ public class SolicitudService {
 
         return solicitudRepository.save(solicitud);
     }
-
 }

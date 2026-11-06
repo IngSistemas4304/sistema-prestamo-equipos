@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de usuarios</title>
 
     <style>
@@ -32,12 +34,17 @@
 
         a {
             display: block;
+            width: 100%;
+            box-sizing: border-box;
             padding: 14px;
             margin-top: 18px;
             background-color: #17365d;
             color: white;
             text-decoration: none;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
         }
 
         a:hover {
@@ -62,12 +69,12 @@
             CONSULTAR USUARIOS
         </a>
 
-        <a th:href="@{/solicitudes/nueva}">
-            GESTIÓN DE SOLICITUDES
+        <a th:href="@{/solicitudes/mis-solicitudes}">
+            MIS SOLICITUDES
         </a>
 
-        <a th:href="@{/solicitudes/pendientes/vista}">
-            APROBAR O RECHAZAR SOLICITUDES
+        <a th:href="@{/}">
+            VOLVER AL MENÚ PRINCIPAL
         </a>
 
     </div>

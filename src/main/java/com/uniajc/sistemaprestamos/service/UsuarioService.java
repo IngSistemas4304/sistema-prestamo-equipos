@@ -71,6 +71,21 @@ public class UsuarioService {
 
         return usuarioRepository.save(usuario);
     }
+    public Usuario iniciarSesion(Integer idUsuario, String clave) {
+
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElse(null);
+
+        if (usuario == null
+                || !"ACTIVO".equalsIgnoreCase(usuario.getEstado())
+                || !passwordEncoder.matches(clave, usuario.getPasswordHash())) {
+
+            throw new IllegalArgumentException(
+                    "ID de usuario o clave incorrectos");
+        }
+
+        return usuario;
+    }
 
 
 }

@@ -1,4 +1,7 @@
+
 package com.uniajc.sistemaprestamos.controller;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,12 +24,15 @@ public class DecisionSolicitudController {
     @PostMapping("/decisiones/{idSolicitud}")
     public String registrarDecision(
             @PathVariable Long idSolicitud,
-            @RequestParam Integer idResponsable,
             @RequestParam String decision,
             @RequestParam(required = false) String observacion,
+            HttpSession session,
             RedirectAttributes redirectAttributes) {
 
         try {
+            Integer idResponsable =
+                    (Integer) session.getAttribute("idUsuario");
+
             decisionService.registrarDecision(
                     idSolicitud,
                     idResponsable,
@@ -40,7 +46,6 @@ public class DecisionSolicitudController {
             );
 
         } catch (IllegalArgumentException e) {
-
             redirectAttributes.addFlashAttribute(
                     "error",
                     e.getMessage()

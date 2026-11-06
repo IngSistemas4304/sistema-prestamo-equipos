@@ -44,12 +44,23 @@
             color: white;
         }
 
+        textarea {
+            width: 95%;
+            min-height: 60px;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
         button {
             padding: 9px 13px;
             border: none;
             border-radius: 5px;
             color: white;
             cursor: pointer;
+            margin: 3px;
         }
 
         .aprobar {
@@ -64,16 +75,37 @@
             text-align: center;
             padding: 20px;
         }
+
+        .alerta {
+            text-align: center;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 5px;
+        }
+
+        .exito {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
     </style>
 </head>
 
 <body>
-
 <div class="contenedor">
 
     <h1>Solicitudes pendientes</h1>
-
     <p>Revisa las solicitudes realizadas por los usuarios.</p>
+
+    <p th:if="${mensaje}" class="alerta exito"
+       th:text="${mensaje}"></p>
+
+    <p th:if="${error}" class="alerta error"
+       th:text="${error}"></p>
 
     <table>
         <thead>
@@ -84,7 +116,7 @@
                 <th>Fecha inicio</th>
                 <th>Fecha devolución</th>
                 <th>Motivo</th>
-                <th>Acciones</th>
+                <th>Observación y decisión</th>
             </tr>
         </thead>
 
@@ -101,21 +133,21 @@
                     <form th:action="@{/decisiones/{idSolicitud}(idSolicitud=${solicitud.idSolicitud})}"
                           method="post">
 
-                        <input type="hidden" name="idResponsable" value="1">
-                        <input type="hidden" name="decision" value="APROBADA">
+                        <textarea name="observacion"
+                                  maxlength="500"
+                                  placeholder="Escribe una observación (opcional)"></textarea>
 
-                        <button type="submit" class="aprobar">
+                        <button type="submit"
+                                name="decision"
+                                value="APROBADA"
+                                class="aprobar">
                             Aprobar
                         </button>
-                    </form>
 
-                    <form th:action="@{/decisiones/{idSolicitud}(idSolicitud=${solicitud.idSolicitud})}"
-                          method="post">
-
-                        <input type="hidden" name="idResponsable" value="1">
-                        <input type="hidden" name="decision" value="RECHAZADA">
-
-                        <button type="submit" class="rechazar">
+                        <button type="submit"
+                                name="decision"
+                                value="RECHAZADA"
+                                class="rechazar">
                             Rechazar
                         </button>
                     </form>
@@ -131,6 +163,5 @@
     </table>
 
 </div>
-
 </body>
 </html>

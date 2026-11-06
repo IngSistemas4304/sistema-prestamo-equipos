@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -200,6 +199,7 @@
             margin: 12px 0;
             border-radius: 6px;
             display: none;
+            white-space: pre-wrap;
         }
 
         .success {
@@ -210,6 +210,12 @@
         .error {
             background: #fee2e2;
             color: #991b1b;
+        }
+
+        .help {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 12px;
         }
 
         @media(max-width: 750px) {
@@ -322,7 +328,6 @@
 
         </section>
 
-
         <!-- REGISTRAR PRESTAMO -->
 
         <section id="registrar" class="section">
@@ -331,34 +336,44 @@
 
             <div class="panel">
 
+                <p class="help">
+                    Registra la entrega utilizando el identificador de una
+                    solicitud que ya haya sido aprobada.
+                    El usuario y el equipo se obtienen de dicha solicitud.
+                </p>
+
                 <form id="formPrestamo">
 
                     <div class="form-grid">
 
                         <div>
-                            <label>ID de solicitud</label>
-                            <input type="number" name="idSolicitud" required>
-                        </div>
-
-                        <div>
-                            <label>ID de usuario</label>
-                            <input type="number" name="idUsuario" required>
+                            <label>ID de solicitud aprobada</label>
+                            <input type="number"
+                                   name="idSolicitud"
+                                   min="1"
+                                   required>
                         </div>
 
                         <div>
                             <label>ID de equipo</label>
-                            <input type="number" name="idEquipo" required>
+                            <input type="number"
+                                   name="idEquipo"
+                                   min="1"
+                                   required>
                         </div>
 
                         <div>
                             <label>Fecha de entrega</label>
-                            <input type="date" name="fechaEntrega" required>
+                            <input type="date"
+                                   name="fechaEntrega"
+                                   required>
                         </div>
 
                         <div>
                             <label>Fecha prevista de devolución</label>
                             <input type="date"
-                                   name="fechaDevolucionPrevista" required>
+                                   name="fechaDevolucionPrevista"
+                                   required>
                         </div>
 
                         <div class="full">
@@ -378,7 +393,6 @@
 
         </section>
 
-
         <!-- DEVOLUCIONES -->
 
         <section id="devolucion" class="section">
@@ -390,17 +404,23 @@
                 <form id="formDevolucion">
 
                     <label>ID del préstamo</label>
-                    <input type="number" name="idPrestamo" required>
+                    <input type="number"
+                           name="idPrestamo"
+                           min="1"
+                           required>
 
                     <label>Fecha de devolución</label>
-                    <input type="date" name="fechaDevolucion" required>
+                    <input type="date"
+                           name="fechaDevolucion"
+                           required>
 
                     <label>Estado del equipo</label>
                     <select name="estadoEquipo" required>
                         <option value="">Seleccione</option>
                         <option value="BUENO">Bueno</option>
-                        <option value="REGULAR">Regular</option>
                         <option value="DAÑADO">Dañado</option>
+                        <option value="MANTENIMIENTO">Mantenimiento</option>
+                        <option value="PERDIDO">Perdido</option>
                     </select>
 
                     <label>Observaciones</label>
@@ -416,7 +436,6 @@
 
         </section>
 
-
         <!-- NOVEDADES -->
 
         <section id="novedades" class="section">
@@ -428,7 +447,10 @@
                 <form id="formNovedad">
 
                     <label>ID del préstamo</label>
-                    <input type="number" name="idPrestamo" required>
+                    <input type="number"
+                           name="idPrestamo"
+                           min="1"
+                           required>
 
                     <label>Tipo de novedad</label>
                     <select name="tipoNovedad" required>
@@ -442,12 +464,12 @@
                     <label>Descripción</label>
                     <textarea name="descripcion" required></textarea>
 
-                    <label>Estado del equipo</label>
-                    <select name="estadoEquipo" required>
-                        <option value="">Seleccione</option>
+                    <label>Estado del equipo (opcional)</label>
+                    <select name="estadoEquipo">
+                        <option value="">Sin cambio de estado</option>
                         <option value="BUENO">Bueno</option>
-                        <option value="REGULAR">Regular</option>
                         <option value="DAÑADO">Dañado</option>
+                        <option value="MANTENIMIENTO">Mantenimiento</option>
                         <option value="PERDIDO">Perdido</option>
                     </select>
 
@@ -460,7 +482,6 @@
             </div>
 
         </section>
-
 
         <!-- PRESTAMOS ACTIVOS -->
 
@@ -484,7 +505,6 @@
 
         </section>
 
-
         <!-- HISTORIAL -->
 
         <section id="historial" class="section">
@@ -506,7 +526,6 @@
             </div>
 
         </section>
-
 
         <!-- VENCIDOS -->
 
@@ -530,7 +549,6 @@
 
         </section>
 
-
         <!-- REPORTES -->
 
         <section id="reportes" class="section">
@@ -552,7 +570,6 @@
             </div>
 
         </section>
-
 
         <!-- AUDITORIA -->
 
@@ -582,13 +599,9 @@
 
 </div>
 
-
 <script>
 
-    // DIRECCIÓN DEL BACKEND
-
     const API = "/api/prestamos";
-
 
     // CAMBIAR DE SECCIÓN
 
@@ -614,7 +627,6 @@
         if (id === "auditoria") cargarAuditoria();
     }
 
-
     // MENSAJES
 
     function mensaje(texto, tipo) {
@@ -624,12 +636,7 @@
         elemento.textContent = texto;
         elemento.className = "message " + tipo;
         elemento.style.display = "block";
-
-        setTimeout(() => {
-            elemento.style.display = "none";
-        }, 4000);
     }
-
 
     // CONVERTIR FORMULARIO A JSON
 
@@ -638,9 +645,7 @@
         return Object.fromEntries(
             new FormData(formulario).entries()
         );
-
     }
-
 
     // CONSUMIR API
 
@@ -664,7 +669,6 @@
             const error = await respuesta.text();
 
             throw new Error(error || "Error en la solicitud");
-
         }
 
         if (respuesta.status === 204) return null;
@@ -672,9 +676,7 @@
         const texto = await respuesta.text();
 
         return texto ? JSON.parse(texto) : null;
-
     }
-
 
     // NORMALIZAR RESPUESTAS DE LISTADOS
 
@@ -695,55 +697,9 @@
         }
 
         return [];
-
     }
 
-
-    // CREAR TABLAS DINAMICAMENTE
-
-    function crearTabla(contenedor, datos) {
-
-        const elemento = document.getElementById(contenedor);
-
-        const lista = obtenerLista(datos);
-
-        if (lista.length === 0) {
-            elemento.innerHTML = "<p>No se encontraron registros.</p>";
-            return;
-        }
-
-        const columnas = Object.keys(lista[0]);
-
-        let html = "<table><thead><tr>";
-
-        columnas.forEach(columna => {
-            html += `<th>${escapar(columna)}</th>`;
-        });
-
-        html += "</tr></thead><tbody>";
-
-        lista.forEach(fila => {
-
-            html += "<tr>";
-
-            columnas.forEach(columna => {
-
-                html += `<td>${escapar(fila[columna])}</td>`;
-
-            });
-
-            html += "</tr>";
-
-        });
-
-        html += "</tbody></table>";
-
-        elemento.innerHTML = html;
-
-    }
-
-
-    // EVITAR INSERTAR HTML NO CONFIABLE
+    // ESCAPAR TEXTO
 
     function escapar(valor) {
 
@@ -756,107 +712,207 @@
             '"': "&quot;",
             "'": "&#39;"
         })[caracter]);
-
     }
 
+    // CREAR TABLAS CON DATOS LEGIBLES
+
+    function crearTabla(contenedor, datos) {
+
+        const elemento = document.getElementById(contenedor);
+        const lista = obtenerLista(datos);
+
+        if (lista.length === 0) {
+            elemento.innerHTML = "<p>No se encontraron registros.</p>";
+            return;
+        }
+
+        const columnas = [
+            { clave: "idPrestamo", titulo: "ID préstamo" },
+            { clave: "idSolicitud", titulo: "ID solicitud" },
+            { clave: "idUsuario", titulo: "ID usuario" },
+            { clave: "equipo", titulo: "Equipo" },
+            { clave: "fechaEntrega", titulo: "Fecha de entrega" },
+            { clave: "fechaDevolucionPrevista", titulo: "Devolución prevista" },
+            { clave: "fechaDevolucionReal", titulo: "Devolución real" },
+            { clave: "estado", titulo: "Estado" },
+            { clave: "observaciones", titulo: "Observaciones" }
+        ];
+
+        const columnasDisponibles = columnas.filter(columna =>
+            lista.some(fila =>
+                Object.prototype.hasOwnProperty.call(fila, columna.clave)
+            )
+        );
+
+        let html = "<table><thead><tr>";
+
+        columnasDisponibles.forEach(columna => {
+            html += `<th>${columna.titulo}</th>`;
+        });
+
+        html += "</tr></thead><tbody>";
+
+        lista.forEach(fila => {
+
+            html += "<tr>";
+
+            columnasDisponibles.forEach(columna => {
+
+                let valor = fila[columna.clave];
+
+                if (columna.clave === "equipo" && valor) {
+                    valor = valor.nombre || "Sin nombre";
+                }
+
+                html += `<td>${escapar(valor)}</td>`;
+            });
+
+            html += "</tr>";
+        });
+
+        html += "</tbody></table>";
+
+        elemento.innerHTML = html;
+    }
+
+    // MOSTRAR REPORTES
+
+    function crearTablaReporte(contenedor, datos) {
+
+        const elemento = document.getElementById(contenedor);
+
+        if (!datos || Object.keys(datos).length === 0) {
+            elemento.innerHTML = "<p>No hay datos para mostrar.</p>";
+            return;
+        }
+
+        let html = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        Object.entries(datos).forEach(([clave, valor]) => {
+
+            html += `
+                <tr>
+                    <td>${escapar(clave)}</td>
+                    <td>${escapar(valor)}</td>
+                </tr>
+            `;
+        });
+
+        html += "</tbody></table>";
+
+        elemento.innerHTML = html;
+    }
 
     // REGISTRAR PRESTAMO
 
     document.getElementById("formPrestamo")
         .addEventListener("submit", async function(e) {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        try {
+            try {
 
-            const datos = obtenerDatos(this);
+                const datos = obtenerDatos(this);
 
-            await peticion(
-                API + "/entregas",
-                "POST",
-                datos
-            );
+                await peticion(
+                    API + "/entregas",
+                    "POST",
+                    datos
+                );
 
-            mensaje("Préstamo registrado correctamente.", "success");
+                mensaje(
+                    "Préstamo registrado correctamente.",
+                    "success"
+                );
 
-            this.reset();
+                this.reset();
 
-            cargarResumen();
+                cargarResumen();
 
-        } catch(error) {
+            } catch(error) {
 
-            mensaje(error.message, "error");
-
-        }
-
-    });
-
+                mensaje(error.message, "error");
+            }
+        });
 
     // REGISTRAR DEVOLUCION
 
     document.getElementById("formDevolucion")
         .addEventListener("submit", async function(e) {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        try {
+            try {
 
-            const datos = obtenerDatos(this);
+                const datos = obtenerDatos(this);
 
-            const id = datos.idPrestamo;
+                const id = datos.idPrestamo;
 
-            delete datos.idPrestamo;
+                delete datos.idPrestamo;
 
-            await peticion(
-                API + "/" + id + "/devoluciones",
-                "POST",
-                datos
-            );
+                await peticion(
+                    API + "/" + id + "/devoluciones",
+                    "POST",
+                    datos
+                );
 
-            mensaje("Devolución registrada correctamente.", "success");
+                mensaje(
+                    "Devolución registrada correctamente.",
+                    "success"
+                );
 
-            this.reset();
+                this.reset();
 
-            cargarResumen();
+                cargarResumen();
 
-        } catch(error) {
+            } catch(error) {
 
-            mensaje(error.message, "error");
-
-        }
-
-    });
-
+                mensaje(error.message, "error");
+            }
+        });
 
     // REGISTRAR NOVEDAD
 
     document.getElementById("formNovedad")
         .addEventListener("submit", async function(e) {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        try {
+            try {
 
-            const datos = obtenerDatos(this);
+                const datos = obtenerDatos(this);
 
-            await peticion(
-                API + "/novedades",
-                "POST",
-                datos
-            );
+                if (datos.estadoEquipo === "") {
+                    datos.estadoEquipo = null;
+                }
 
-            mensaje("Novedad registrada correctamente.", "success");
+                await peticion(
+                    API + "/novedades",
+                    "POST",
+                    datos
+                );
 
-            this.reset();
+                mensaje(
+                    "Novedad registrada correctamente.",
+                    "success"
+                );
 
-        } catch(error) {
+                this.reset();
 
-            mensaje(error.message, "error");
+            } catch(error) {
 
-        }
-
-    });
-
+                mensaje(error.message, "error");
+            }
+        });
 
     // CONSULTAR ACTIVOS
 
@@ -874,11 +930,8 @@
         } catch(error) {
 
             mensaje(error.message, "error");
-
         }
-
     }
-
 
     // CONSULTAR HISTORIAL
 
@@ -896,11 +949,8 @@
         } catch(error) {
 
             mensaje(error.message, "error");
-
         }
-
     }
-
 
     // CONSULTAR VENCIDOS
 
@@ -918,11 +968,8 @@
         } catch(error) {
 
             mensaje(error.message, "error");
-
         }
-
     }
-
 
     // CONSULTAR REPORTES
 
@@ -932,16 +979,13 @@
 
             const datos = await peticion(API + "/reportes");
 
-            crearTabla("tablaReportes", datos);
+            crearTablaReporte("tablaReportes", datos);
 
         } catch(error) {
 
             mensaje(error.message, "error");
-
         }
-
     }
-
 
     // CONSULTAR AUDITORIA
 
@@ -956,32 +1000,19 @@
         } catch(error) {
 
             mensaje(error.message, "error");
-
         }
-
     }
-
 
     // ACTUALIZAR PANEL PRINCIPAL
 
     async function cargarResumen() {
 
-        try {
-
-            await Promise.all([
-                cargarActivos(),
-                cargarVencidos(),
-                cargarHistorial()
-            ]);
-
-        } catch(error) {
-
-            mensaje(error.message, "error");
-
-        }
-
+        await Promise.allSettled([
+            cargarActivos(),
+            cargarVencidos(),
+            cargarHistorial()
+        ]);
     }
-
 
     // CARGAR INFORMACION INICIAL
 

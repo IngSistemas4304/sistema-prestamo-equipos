@@ -1,3 +1,4 @@
+
 package com.uniajc.sistemaprestamos.dto;
 
 import java.time.LocalDate;
@@ -13,10 +14,6 @@ public record RegistrarPrestamoRequest(
 
         @NotNull
         @Positive
-        Long idUsuario,
-
-        @NotNull
-        @Positive
         Long idEquipo,
 
         @NotNull
@@ -27,5 +24,4 @@ public record RegistrarPrestamoRequest(
 
         String observaciones
 
-) {
-}
+) {}
