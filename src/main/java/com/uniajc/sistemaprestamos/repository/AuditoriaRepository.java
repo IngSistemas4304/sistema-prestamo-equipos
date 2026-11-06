@@ -8,6 +8,6 @@ import com.uniajc.sistemaprestamos.entity.Auditoria;
 
 public interface AuditoriaRepository extends JpaRepository<Auditoria, Long> {
 
-    // Consultar auditorías ordenadas por fecha
+   
     List<Auditoria> findAllByOrderByFechaDesc();
 }
