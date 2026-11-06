@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -67,45 +68,35 @@
 </head>
 
 <body>
-
     <div class="contenedor">
-
         <h1>REGISTRO DE USUARIOS</h1>
 
-        <form>
+        <form th:action="@{/usuarios/registrar}" method="post">
 
-            <label>Tipo de documento:</label>
-            <select name="tipoDocumento" required>
-                <option value="">Seleccione</option>
-                <option value="CC">Cédula de ciudadanía</option>
-                <option value="TI">Tarjeta de identidad</option>
-                <option value="CE">Cédula de extranjería</option>
-            </select>
-
-            <label>Número de documento:</label>
-            <input type="text" name="numeroDocumento" required>
-
-            <label>Nombres:</label>
-            <input type="text" name="nombres" required>
-
-            <label>Apellidos:</label>
-            <input type="text" name="apellidos" required>
+            <label>Nombre completo:</label>
+            <input type="text" name="nombre" required>
 
             <label>Correo electrónico:</label>
-            <input type="email" name="correo" required>
+            <input type="email" name="email" required>
 
-            <label>Teléfono:</label>
-            <input type="text" name="telefono">
+            <label>Contraseña:</label>
+            <input type="password" name="password" required>
+
+            <label>Rol:</label>
+            <select name="idRol" required>
+                <option value="">Seleccione un rol</option>
+                <option th:each="rol : ${roles}"
+                        th:value="${rol.idRol}"
+                        th:text="${rol.nombre}">
+                </option>
+            </select>
 
             <button type="submit">REGISTRAR USUARIO</button>
-
         </form>
 
         <a class="enlace" th:href="@{/usuarios}">
             VER LISTADO DE USUARIOS
         </a>
-
     </div>
-
 </body>
 </html>

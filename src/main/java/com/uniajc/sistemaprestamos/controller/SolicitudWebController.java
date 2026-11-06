@@ -36,7 +36,7 @@ public class SolicitudWebController {
 
     @GetMapping("/solicitudes/mis-solicitudes")
     public String mostrarMisSolicitudes(
-            @RequestParam Long idUsuario, Model model) {
+            @RequestParam Integer idUsuario, Model model) {
 
         model.addAttribute("solicitudes",
                 solicitudService.consultarPorUsuario(idUsuario));
@@ -56,7 +56,7 @@ public class SolicitudWebController {
     // Registrar una nueva solicitud desde el formulario
     @PostMapping("/solicitudes/crear")
     public String crearSolicitud(
-            @RequestParam Long idUsuario,
+            @RequestParam Integer idUsuario,
             @RequestParam Long idEquipo,
             @RequestParam
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -75,6 +75,15 @@ public class SolicitudWebController {
         solicitud.setMotivo(motivo);
 
         solicitudService.registrarSolicitud(solicitud);
+
+        return "redirect:/solicitudes/mis-solicitudes?idUsuario=" + idUsuario;
+    }
+    @PostMapping("/solicitudes/cancelar")
+    public String cancelarSolicitud(
+            @RequestParam Long idSolicitud,
+            @RequestParam Integer idUsuario) {
+
+        solicitudService.cancelarSolicitud(idSolicitud, idUsuario);
 
         return "redirect:/solicitudes/mis-solicitudes?idUsuario=" + idUsuario;
     }

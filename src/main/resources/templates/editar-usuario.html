@@ -1,5 +1,7 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Editar usuario</title>
@@ -63,6 +65,16 @@
             margin-top: 20px;
             color: #17365d;
         }
+
+        .mensaje {
+            color: green;
+            text-align: center;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -72,22 +84,30 @@
 
         <h1>EDITAR USUARIO</h1>
 
-        <form>
+        <p class="mensaje" th:if="${mensaje}" th:text="${mensaje}"></p>
+        <p class="error" th:if="${error}" th:text="${error}"></p>
 
-            <label>Número de documento:</label>
-            <input type="text" name="numeroDocumento" required>
+        <form th:action="@{/usuarios/actualizar}" method="post">
 
-            <label>Nombres:</label>
-            <input type="text" name="nombres" required>
+            <input type="hidden" name="idUsuario"
+                   th:value="${usuario.idUsuario}">
 
-            <label>Apellidos:</label>
-            <input type="text" name="apellidos" required>
+            <label>Nombre completo:</label>
+            <input type="text" name="nombre"
+                   th:value="${usuario.nombre}" required>
 
             <label>Correo electrónico:</label>
-            <input type="email" name="correo" required>
+            <input type="email" name="email"
+                   th:value="${usuario.email}" required>
 
-            <label>Teléfono:</label>
-            <input type="text" name="telefono">
+            <label>Rol:</label>
+            <select name="idRol" required>
+                <option th:each="rol : ${roles}"
+                        th:value="${rol.idRol}"
+                        th:text="${rol.nombre}"
+                        th:selected="${rol.idRol == usuario.rol.idRol}">
+                </option>
+            </select>
 
             <button type="submit">GUARDAR CAMBIOS</button>
 

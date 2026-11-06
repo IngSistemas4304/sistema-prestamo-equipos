@@ -11,5 +11,5 @@ public interface DecisionSolicitudRepository
 
     List<DecisionSolicitud> findByIdSolicitud(Long idSolicitud);
 
-    List<DecisionSolicitud> findByIdResponsable(Long idResponsable);
+    List<DecisionSolicitud> findByIdResponsable(Integer idResponsable);
 }

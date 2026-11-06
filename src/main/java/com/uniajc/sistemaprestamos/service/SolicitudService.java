@@ -62,7 +62,7 @@ public class SolicitudService {
     }
 
     // Consultar solicitudes de un usuario
-    public List<Solicitud> consultarPorUsuario(Long idUsuario) {
+    	public List<Solicitud> consultarPorUsuario(Integer idUsuario) {
         return solicitudRepository.findByIdUsuario(idUsuario);
     }
 
@@ -73,7 +73,7 @@ public class SolicitudService {
     
 
     // Cancelar una solicitud pendiente
-    public Solicitud cancelarSolicitud(Long idSolicitud, Long idUsuario) {
+    public Solicitud cancelarSolicitud(Long idSolicitud, Integer idUsuario) {
 
         Solicitud solicitud = solicitudRepository.findById(idSolicitud)
                 .orElseThrow(() -> new IllegalArgumentException(

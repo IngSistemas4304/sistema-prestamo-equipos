@@ -26,7 +26,7 @@ public class DecisionSolicitudService {
     // Aprobar o rechazar una solicitud
     public DecisionSolicitud registrarDecision(
             Long idSolicitud,
-            Long idResponsable,
+            Integer idResponsable,
             String decision,
             String observacion) {
 

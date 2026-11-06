@@ -8,9 +8,9 @@ import com.uniajc.sistemaprestamos.entity.Solicitud;
 
 public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
 
-    List<Solicitud> findByIdUsuario(Long idUsuario);
+	List<Solicitud> findByIdUsuario(Integer idUsuario);
 
     List<Solicitud> findByEstado(String estado);
 
-    List<Solicitud> findByIdUsuarioAndEstado(Long idUsuario, String estado);
+    List<Solicitud> findByIdUsuarioAndEstado(Integer idUsuario, String estado);
 }

@@ -42,7 +42,7 @@ public class SolicitudController {
     // Consultar solicitudes de un usuario
     @GetMapping("/usuario/{idUsuario}")
     public List<Solicitud> consultarPorUsuario(
-            @org.springframework.web.bind.annotation.PathVariable Long idUsuario) {
+            @org.springframework.web.bind.annotation.PathVariable Integer idUsuario) {
 
         return solicitudService.consultarPorUsuario(idUsuario);
     }
@@ -51,7 +51,7 @@ public class SolicitudController {
     @DeleteMapping("/{idSolicitud}/usuario/{idUsuario}")
     public Solicitud cancelarSolicitud(
             @org.springframework.web.bind.annotation.PathVariable Long idSolicitud,
-            @org.springframework.web.bind.annotation.PathVariable Long idUsuario) {
+            @org.springframework.web.bind.annotation.PathVariable Integer idUsuario) {
 
         return solicitudService.cancelarSolicitud(idSolicitud, idUsuario);
     }

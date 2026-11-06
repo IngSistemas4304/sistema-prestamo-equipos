@@ -22,7 +22,7 @@ public class DecisionSolicitud {
     private Long idSolicitud;
 
     @Column(name = "id_responsable", nullable = false)
-    private Long idResponsable;
+    private Integer idResponsable;
 
     @Column(name = "decision", nullable = false)
     private String decision;
@@ -52,11 +52,11 @@ public class DecisionSolicitud {
         this.idSolicitud = idSolicitud;
     }
 
-    public Long getIdResponsable() {
+    public Integer getIdResponsable() {
         return idResponsable;
     }
 
-    public void setIdResponsable(Long idResponsable) {
+    public void setIdResponsable(Integer idResponsable) {
         this.idResponsable = idResponsable;
     }
 

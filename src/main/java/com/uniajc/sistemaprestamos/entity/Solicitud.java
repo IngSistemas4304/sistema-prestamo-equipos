@@ -19,7 +19,7 @@ public class Solicitud {
     private Long idSolicitud;
 
     @Column(name = "id_usuario", nullable = false)
-    private Long idUsuario;
+    private Integer idUsuario;
 
     @Column(name = "id_equipo", nullable = false)
     private Long idEquipo;
@@ -50,11 +50,11 @@ public class Solicitud {
         this.idSolicitud = idSolicitud;
     }
 
-    public Long getIdUsuario() {
+    public Integer getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(Long idUsuario) {
+    public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
 

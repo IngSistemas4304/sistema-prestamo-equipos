@@ -78,6 +78,8 @@
                     <th>Fecha de devolución</th>
                     <th>Motivo</th>
                     <th>Estado</th>
+					<th>Acciones</th>
+					
                 </tr>
             </thead>
 
@@ -89,10 +91,33 @@
                     <td th:text="${solicitud.fechaFin}"></td>
                     <td th:text="${solicitud.motivo}"></td>
                     <td class="estado" th:text="${solicitud.estado}"></td>
+					<td>
+					    <form th:if="${solicitud.estado == 'PENDIENTE'}"
+					          th:action="@{/solicitudes/cancelar}"
+					          method="post">
+
+					        <input type="hidden" name="idSolicitud"
+					               th:value="${solicitud.idSolicitud}">
+
+					        <input type="hidden" name="idUsuario"
+					               th:value="${solicitud.idUsuario}">
+
+					        <button type="submit"
+					                style="background: #c0392b; color: white;
+					                       padding: 8px 12px; border: none;
+					                       border-radius: 5px; cursor: pointer;">
+					            Cancelar
+					        </button>
+					    </form>
+
+					    <span th:if="${solicitud.estado != 'PENDIENTE'}">
+					        No disponible
+					    </span>
+					</td>
                 </tr>
 
                 <tr th:if="${#lists.isEmpty(solicitudes)}">
-                    <td colspan="6">No tienes solicitudes registradas.</td>
+                    <td colspan="7">No tienes solicitudes registradas.</td>
                 </tr>
             </tbody>
         </table>
